@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperShare — Wasm + Service Worker P2P Transfer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <span class="dot" id="netDot"></span>
+        <h1>SuperShare</h1>
+        <span class="badge" id="wasmBadge">WASM: Loading...</span>
+        <span class="badge" id="swBadge">SW Proxy: Loading...</span>
+      </div>
+      <div class="identity">
+        You are <strong id="myName">...</strong>
+        <button id="autoConfigBtn" class="btn-secondary">Auto-Discover Wi-Fi</button>
+      </div>
+    </header>
+
+    <section class="card radar-card">
+      <div class="radar-header">
+        <h2>Nearby Devices on Your Wi-Fi</h2>
+        <span class="sub" id="roomInfo">Scanning local subnet...</span>
+      </div>
+      <div id="peerList" class="peer-grid">
+        <div class="empty-state">Open this GitHub Pages URL on your second device connected to the same Wi-Fi or Hotspot.</div>
+      </div>
+      <div class="manual-pair">
+        <input type="text" id="roomInput" placeholder="Or enter custom Room Code (for isolated Wi-Fi / 5G)" />
+        <button id="joinRoomBtn" class="btn-secondary">Join Room</button>
+      </div>
+    </section>
+
+    <section class="card transfer-card hidden" id="transferPanel">
+      <div class="panel-top">
+        <div>
+          <h3>Connected to <span id="activePeerName">Peer</span></h3>
+          <span class="conn-type" id="connTypeBadge">Direct LAN P2P (4x Parallel Channels)</span>
+        </div>
+        <button id="disconnectBtn" class="btn-danger">Disconnect</button>
+      </div>
+
+      <div class="drop-zone" id="dropZone">
+        <p>Drag & drop files/folders here, or click to select</p>
+        <span class="hint">Supports multi-GB streaming via Service Worker HTTP Proxy</span>
+        <input type="file" id="fileInput" multiple hidden />
+      </div>
+
+      <div id="transferQueue" class="queue-list"></div>
+    </section>
+  </div>
+
+  <!-- Incoming Transfer Consent Modal (Accept / Accept All / Decline) -->
+  <div id="consentModal" class="modal hidden">
+    <div class="modal-box">
+      <h3>Incoming Files from <span id="senderModalName">Peer</span></h3>
+      <p class="sas-code">Security Verification Code: <strong id="sasCode">----</strong></p>
+      <ul id="incomingFileList" class="file-preview-list"></ul>
+      <div class="modal-actions">
+        <button id="declineBtn" class="btn-danger">Decline</button>
+        <button id="acceptSelectedBtn" class="btn-secondary">Accept Checked</button>
+        <button id="acceptAllBtn" class="btn-primary">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
